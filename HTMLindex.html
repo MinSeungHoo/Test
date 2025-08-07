@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>민승후 프로필</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+  min-height: 800px;
+  padding: 40px 90px; /* 좌우 여백 1.5배로 증가 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+  box-sizing: border-box;
+}
+
+    .dark-mode {
+      background: linear-gradient(135deg, #121212, #1f1f1f);
+      color: #eee;
+    }
+
+.card {
+  background-color: #fff;
+  padding: 40px 30px 60px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 480px; /* 기존 320px에서 1.5배 확대 */
+  max-width: 100%;
+  text-align: center;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+}
+    .dark-mode .card {
+      background-color: #2c2c2c;
+      color: #eee;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #f0f0f0;
+      margin: 0 auto 24px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name {
+      font-size: 16pt;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-family: Gulim, sans-serif;
+    }
+
+    .hobby,
+    .email {
+      font-size: 11pt;
+      margin-bottom: 8px;
+      font-family: Gulim, sans-serif;
+    }
+
+    .email {
+      color: #5e35b1;
+    }
+
+    .button-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 16px;
+      background-color: #7e57c2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 11pt;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-family: Gulim, sans-serif;
+    }
+
+    button:hover {
+      background-color: #5e35b1;
+    }
+
+    /* 팝업 스타일 */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      position: relative;
+      font-family: Gulim, sans-serif;
+    }
+
+    .dark-mode .popup-content {
+      background: #2c2c2c;
+      color: #eee;
+    }
+
+    .popup h2 {
+      font-size: 20pt;
+      margin-bottom: 10px;
+    }
+
+    .popup .close-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #7e57c2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 11pt;
+    }
+
+    .popup .close-btn:hover {
+      background-color: #5e35b1;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: red;
+      animation: explode 1s ease-out forwards;
+      border-radius: 50%;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+      }
+    }
+
+    /* 반응형 - 화면 작아질 때 */
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 20px;
+      }
+
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="profile-image">
+      <img src="panda.png" alt="귀여운 판다 이미지" />
+    </div>
+    <div class="name" id="name">안녕하세요! 민승후입니다.</div>
+    <div class="hobby" id="hobby">취미: 자기계발, 독서, 모임갖기</div>
+    <div class="email" id="email">이메일: shoo@kspo.or.kr</div>
+
+    <div class="button-row">
+      <button id="greetBtn" onclick="showPopup()">인사하기</button>
+      <button id="langBtn" onclick="toggleLanguage()">English</button>
+      <button id="modeBtn" onclick="toggleDarkMode()">다크모드</button>
+    </div>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h2>안녕하세요! 🎉</h2>
+      <button class="close-btn" onclick="closePopup()">확인</button>
+    </div>
+  </div>
+
+  <script>
+    let isEnglish = false;
+    let isDark = false;
+
+    function showPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'flex';
+
+      // 폭죽 생성
+      const popupContent = document.querySelector('.popup-content');
+      const count = 30;
+
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.backgroundColor = getRandomColor();
+        confetti.style.left = '50%';
+        confetti.style.top = '50%';
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 150 + 50;
+        const x = Math.cos(angle) * distance + 'px';
+        const y = Math.sin(angle) * distance + 'px';
+        confetti.style.setProperty('--x', x);
+        confetti.style.setProperty('--y', y);
+
+        popupContent.appendChild(confetti);
+      }
+
+      // 3초 후 팝업 닫기
+      setTimeout(() => {
+        closePopup();
+      }, 3000);
+    }
+
+    function closePopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'none';
+      document.querySelectorAll('.confetti').forEach(el => el.remove());
+    }
+
+    function getRandomColor() {
+      const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ff9800'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function toggleLanguage() {
+      isEnglish = !isEnglish;
+
+      document.getElementById('name').innerText = isEnglish
+        ? "Hello! I'm Seunghoo Min."
+        : "안녕하세요! 민승후입니다.";
+
+      document.getElementById('hobby').innerText = isEnglish
+        ? "Hobbies: Self-development, Reading, Networking"
+        : "취미: 자기계발, 독서, 모임갖기";
+
+      document.getElementById('email').innerText = isEnglish
+        ? "Email: shoo@kspo.or.kr"
+        : "이메일: shoo@kspo.or.kr";
+
+      document.getElementById('langBtn').innerText = isEnglish ? "한국어" : "English";
+    }
+
+    function toggleDarkMode() {
+      isDark = !isDark;
+      document.body.classList.toggle('dark-mode', isDark);
+      document.getElementById('modeBtn').innerText = isDark ? "라이트모드" : "다크모드";
+
+      // 팝업이 켜져 있을 때도 다크모드 반영
+      const popupContent = document.querySelector('.popup-content');
+      if (isDark) {
+        popupContent.classList.add('dark-mode');
+      } else {
+        popupContent.classList.remove('dark-mode');
+      }
+    }
+  </script>
+</body>
+</html>
